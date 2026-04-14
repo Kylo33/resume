@@ -18,6 +18,4 @@ server {
 }
 EOF
 
-RUN cat /etc/nginx/conf.d/default.conf
-
 COPY --from=compile /usr/local/app/resume.pdf /usr/share/nginx/html/resume.pdf
