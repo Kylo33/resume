@@ -7,15 +7,16 @@ import (
 
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
+	"github.com/Kylo33/resume/resume"
 )
 
 //go:embed resume.yaml
-var resumeYamlString string
+var resumeSource []byte
 
 func main() {
-	p := tea.NewProgram(
-		model{content: resumeYamlString},
-	)
+
+	r := resume.Parse(resumeSource)
+	p := tea.NewProgram(InitializeModel(r))
 
 	if _, err := p.Run(); err != nil {
 		fmt.Println("could not run program:", err)
@@ -24,13 +25,15 @@ func main() {
 }
 
 type model struct {
-	content  string
-	ready    bool
+	resume   resume.Resume
 	viewport viewport.Model
+	ready    bool
 }
 
-func InitializeModel(resumeContent string) model {
-	return model{content: resumeContent}
+func InitializeModel(r resume.Resume) model {
+	return model{
+		resume: r,
+	}
 }
 
 func (m model) Init() tea.Cmd {
@@ -53,7 +56,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if !m.ready {
 			m.viewport = viewport.New(viewport.WithWidth(msg.Width), viewport.WithHeight(msg.Height))
 			m.viewport.SoftWrap = true
-			m.viewport.SetContent(m.content)
+			m.viewport.SetContent(m.resume.Name)
 			m.ready = true
 		} else {
 			m.viewport.SetWidth(msg.Width)
@@ -78,4 +81,3 @@ func (m model) View() tea.View {
 	}
 	return v
 }
-
