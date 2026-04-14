@@ -5,6 +5,8 @@
 #let formatDateString(s) = toml(bytes("date = " + s + "-01")).date.display("[month repr:short] [year]")
 #let myResume = yaml("resume.yaml")
 
+#set document(title: strfmt("{} - Resume", myResume.name))
+
 #show: resume.with(
   author: myResume.name,
   location: myResume.location,
