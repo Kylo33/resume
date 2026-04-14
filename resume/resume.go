@@ -27,7 +27,7 @@ type Skill struct {
 }
 
 type Education struct {
-	Institutiton string
+	Institution string
 	Location     string
 	StartDate    YearMonthTime `yaml:"start_date"`
 	EndDate      YearMonthTime `yaml:"end_date"`

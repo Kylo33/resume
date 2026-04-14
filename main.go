@@ -14,7 +14,6 @@ import (
 var resumeSource []byte
 
 func main() {
-
 	r := resume.Parse(resumeSource)
 	p := tea.NewProgram(InitializeModel(r))
 
@@ -56,12 +55,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if !m.ready {
 			m.viewport = viewport.New(viewport.WithWidth(msg.Width), viewport.WithHeight(msg.Height))
 			m.viewport.SoftWrap = true
-			m.viewport.SetContent(m.resume.Name)
 			m.ready = true
 		} else {
 			m.viewport.SetWidth(msg.Width)
 			m.viewport.SetHeight(msg.Height)
 		}
+		m.viewport.SetContent(m.resume.Format(msg.Width))
 	}
 
 	m.viewport, cmd = m.viewport.Update(msg)
@@ -73,11 +72,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() tea.View {
 	var v tea.View
 	v.AltScreen = true
-	v.MouseMode = tea.MouseModeCellMotion
+	// v.MouseMode = tea.MouseModeCellMotion
 	if !m.ready {
 		v.SetContent("\n  Initializing...")
 	} else {
-		v.SetContent(m.viewport.View())
+		v.SetContent(m.resume.Format(m.viewport.Width()))
 	}
 	return v
 }
