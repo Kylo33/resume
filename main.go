@@ -14,6 +14,14 @@ import (
 var resumeSource []byte
 
 func main() {
+	if len(os.Getenv("DEBUG")) > 0 {
+		f, err := tea.LogToFile("debug.log", "debug")
+		if err != nil {
+			fmt.Println("fatal:", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+	}
 	r := resume.Parse(resumeSource)
 	p := tea.NewProgram(InitializeModel(r))
 
@@ -54,7 +62,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		if !m.ready {
 			m.viewport = viewport.New(viewport.WithWidth(msg.Width), viewport.WithHeight(msg.Height))
-			m.viewport.SoftWrap = true
 			m.ready = true
 		} else {
 			m.viewport.SetWidth(msg.Width)
@@ -76,7 +83,7 @@ func (m model) View() tea.View {
 	if !m.ready {
 		v.SetContent("\n  Initializing...")
 	} else {
-		v.SetContent(m.resume.Format(m.viewport.Width()))
+		v.SetContent(m.viewport.View())
 	}
 	return v
 }

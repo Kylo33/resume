@@ -42,6 +42,7 @@ type Job struct {
 	Location  string
 	StartDate YearMonthTime `yaml:"start_date"`
 	EndDate   YearMonthTime `yaml:"end_date"`
+	Extra []string
 }
 
 type Project struct {
