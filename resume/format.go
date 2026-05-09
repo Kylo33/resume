@@ -13,8 +13,12 @@ import (
 
 const (
 	nameColor    = lipgloss.Green
-	projectColor = lipgloss.Green
 )
+
+var subtitleStyle = lipgloss.
+	NewStyle().
+	Foreground(lipgloss.White).
+	Italic(true)
 
 func (r Resume) Format(w int) string {
 	var (
@@ -24,8 +28,9 @@ func (r Resume) Format(w int) string {
 	contactBlock := r.FormatContactBlock(w - marginSize*2)
 	educationBlock := r.FormatEducation(w - marginSize*2)
 	workBlock := r.FormatWork(w - marginSize*2)
+	projectsBlock := r.FormatProjects(w - marginSize*2)
 
-	spacer := "\n"
+	spacer := ""
 
 	return lipgloss.NewStyle().
 		Margin(marginSize).
@@ -39,6 +44,7 @@ func (r Resume) Format(w int) string {
 				pageSection("Work Experience", w-marginSize*2, workColor),
 				workBlock,
 				pageSection("Projects", w-marginSize*2, projectColor),
+				projectsBlock,
 			),
 		)
 
@@ -176,6 +182,6 @@ func datesHelper(start, end YearMonthTime) string {
 }
 
 func sameLine(start, end string, width int) string {
-	spacer := strings.Repeat(" ", width - lipgloss.Width(start) - lipgloss.Width(end))
+	spacer := strings.Repeat(" ", width-lipgloss.Width(start)-lipgloss.Width(end))
 	return lipgloss.JoinHorizontal(lipgloss.Top, start, spacer, end)
 }

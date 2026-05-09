@@ -9,6 +9,11 @@ func (r Resume) FormatWork(w int) string {
 	for _, job := range r.Work {
 		title := renderHeader(2, job.Title, workColor)
 		dates := renderHeader(3, datesHelper(job.StartDate, job.EndDate), workColor)
+		company := subtitleStyle.Render(job.Company)
+		location := lipgloss.
+			NewStyle().
+			Foreground(lipgloss.White).
+			Render(job.Location)
 
 		container := lipgloss.
 			NewStyle().
@@ -17,6 +22,7 @@ func (r Resume) FormatWork(w int) string {
 				lipgloss.JoinVertical(
 					lipgloss.Left,
 					sameLine(title, dates, w),
+					sameLine(company, location, w),
 					renderExtra(job.Extra, w),
 				),
 			)

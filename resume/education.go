@@ -8,16 +8,14 @@ import (
 
 const educationColor = lipgloss.Yellow
 
+
 func (r Resume) FormatEducation(w int) string {
 	var blocks []string
 	for _, edu := range r.Education {
 		institution := renderHeader(2, edu.Institution, educationColor)
 		dates := renderHeader(3, datesHelper(edu.StartDate, edu.EndDate), educationColor)
 
-		degree := lipgloss.
-			NewStyle().
-			Foreground(lipgloss.White).
-			Italic(true).
+		degree := subtitleStyle.
 			Render(
 				fmt.Sprintf(
 					"%v, %v GPA",

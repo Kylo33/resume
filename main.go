@@ -35,6 +35,7 @@ type model struct {
 	resume   resume.Resume
 	viewport viewport.Model
 	ready    bool
+	darkMode bool
 }
 
 func InitializeModel(r resume.Resume) model {
@@ -44,7 +45,7 @@ func InitializeModel(r resume.Resume) model {
 }
 
 func (m model) Init() tea.Cmd {
-	return nil
+	return tea.RequestBackgroundColor
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -54,6 +55,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	)
 
 	switch msg := msg.(type) {
+	case tea.BackgroundColorMsg:
+		m.darkMode = msg.IsDark()
 	case tea.KeyPressMsg:
 		if k := msg.String(); k == "ctrl+c" || k == "q" || k == "esc" {
 			return m, tea.Quit
